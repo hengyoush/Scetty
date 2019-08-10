@@ -7,6 +7,7 @@ object AttributeKey {
   private val pool: ConstantPool[AttributeKey[AnyRef]] = new AttributeKey[AnyRef](_, _)
 
   def valueOf[T](name: String): AttributeKey[T] =  pool.valueOf(name).asInstanceOf[AttributeKey[T]]
+
   def valueOf[T](firstNameComponent: Class[_], secondNameComponent: String): AttributeKey[T] =
     pool.valueOf(firstNameComponent, secondNameComponent).asInstanceOf[AttributeKey[T]]
 

@@ -1,0 +1,5 @@
+package channel
+
+trait ChannelMetadata {
+
+}

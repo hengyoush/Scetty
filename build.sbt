@@ -1,4 +1,4 @@
-name := "scala-test4"
+name := "Scetty"
 // a
 version := "0.1"
   

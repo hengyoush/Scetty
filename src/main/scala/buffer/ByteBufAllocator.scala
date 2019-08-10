@@ -1,0 +1,5 @@
+package buffer
+
+trait ByteBufAllocator {
+
+}
