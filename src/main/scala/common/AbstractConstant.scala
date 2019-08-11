@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicLong
 import common.AbstractConstant.uniqueIdGenerator
 
 abstract class AbstractConstant[T <: AbstractConstant[T]](_id: Int, _name: String) extends Constant[T] {
-  private val uniquifier = uniqueIdGenerator.getAndIncrement()
+  private val uniquifier = uniqueIdGenerator.getAndIncrement
 
   override def id(): Int = _id
 
@@ -15,7 +15,7 @@ abstract class AbstractConstant[T <: AbstractConstant[T]](_id: Int, _name: Strin
     if (this eq o) return 0
 
     val other: AbstractConstant[T]  = o
-    val returnCode: Int = hashCode() - other.hashCode()
+    val returnCode: Int = hashCode - other.hashCode
 
     if (returnCode != 0) return returnCode
 
@@ -28,5 +28,5 @@ abstract class AbstractConstant[T <: AbstractConstant[T]](_id: Int, _name: Strin
 }
 
 object AbstractConstant {
-  private val uniqueIdGenerator = new AtomicLong()
+  private val uniqueIdGenerator = new AtomicLong
 }
