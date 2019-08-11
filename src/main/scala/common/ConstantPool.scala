@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import common.ConstantPool.checkNotNullAndNotEmpty
 
 abstract class ConstantPool[T <: Constant[T]] {
-  private val constants: ConcurrentHashMap[String, T] = new ConcurrentHashMap()
+  private val constants: ConcurrentHashMap[String, T] = new ConcurrentHashMap
   private val _nextId: AtomicInteger = new AtomicInteger(1)
 
   def valueOf(firstNameComponent: Class[_], secondNameComponent: String): T = {
@@ -32,7 +32,7 @@ abstract class ConstantPool[T <: Constant[T]] {
   }
 
   def newConstant(id: Int, name: String): T
-  def nextId: Int = _nextId.getAndIncrement()
+  def nextId: Int = _nextId.getAndIncrement
 }
 
 object ConstantPool {

@@ -23,5 +23,5 @@ trait Future[V] extends java.util.concurrent.Future[V] {
   def awaitUninterruptibly(timeoutMills: Long): Boolean
 
   def getNow: V
-  def cancel(mayInterruptIfRunning: Boolean)
+  def cancel(mayInterruptIfRunning: Boolean): Boolean
 }
