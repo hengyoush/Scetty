@@ -189,6 +189,8 @@ class DefaultPromise[T](eventExecutor: EventExecutor) extends AbstractFuture[T] 
         finally currStackDepth set _currStackDepth
       }
     }
+
+    safeExecute(this.eventExecutor, () => notifyListenersNow())
   }
 
   private def notifyListenersNow(): Unit = {
@@ -290,6 +292,8 @@ object DefaultPromise {
   private val SUCCESS = new AnyRef
   private val UNCANCELLABLE = new AnyRef
 
+  def apply[V](eventExecutor: EventExecutor): DefaultPromise[V] = new DefaultPromise(eventExecutor)
+
   private def notifyListener0[V](f: Future[_ >: V], l: GenericFutureListener[_ <: Future[_ >: V]]): Unit = l operationComplete f
 
   private def isDone0(result: Any): Boolean = result != null && result != UNCANCELLABLE
@@ -299,6 +303,10 @@ object DefaultPromise {
       case r: CauseHolder => r.cause.isInstanceOf[CancellationException]
       case _ => false
     }
+
+  private def safeExecute(executor: EventExecutor, task: Runnable) = {
+    executor.execute(task)
+  }
 
   private class CauseHolder(_cause: Throwable) {
     def cause: Throwable = _cause

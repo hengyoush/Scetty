@@ -39,6 +39,5 @@ final class DefaultFutureListeners {
 }
 
 object DefaultFutureListeners {
-  def apply(first: GenericFutureListener[_ <: Future[_]], second: GenericFutureListener[_ <: Future[_]]): DefaultFutureListeners
-  = new DefaultFutureListeners(first, second)
+  def apply(first: GenericFutureListener[_], second: GenericFutureListener[_]) = new DefaultFutureListeners(first, second)
 }
