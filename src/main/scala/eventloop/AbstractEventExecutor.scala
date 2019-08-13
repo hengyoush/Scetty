@@ -3,7 +3,7 @@ package eventloop
 import java.util.concurrent.TimeUnit.SECONDS
 import java.util.concurrent.{AbstractExecutorService, Callable, RunnableFuture, TimeUnit}
 
-import common.concurrent.{DefaultPromise, Future, Promise, PromiseTask}
+import common.concurrent.{DefaultPromise, Future, Promise, PromiseTask, ScheduledFuture}
 import common.logger.InternalLoggerFactory
 import eventloop.AbstractEventExecutor._
 
@@ -29,16 +29,16 @@ abstract class AbstractEventExecutor(_parent: EventExecutorGroup)
   override def newTaskFor[T](callable: Callable[T]): RunnableFuture[T] = PromiseTask(this, callable)
   override def newTaskFor[T](runnable: Runnable, value: T): RunnableFuture[T] = PromiseTask(this, runnable, value)
 
-  override def schedule(command: Runnable, delay: Long, unit: TimeUnit) =
+  override def schedule(command: Runnable, delay: Long, unit: TimeUnit): ScheduledFuture[_] =
     throw new UnsupportedOperationException
 
-  override def schedule[V](callable: Callable[V], delay: Long, unit: TimeUnit) =
+  override def schedule[V](callable: Callable[V], delay: Long, unit: TimeUnit): ScheduledFuture[V] =
     throw new UnsupportedOperationException
 
-  override def scheduleAtFixedRate(command: Runnable, initialDelay: Long, period: Long, unit: TimeUnit) =
+  override def scheduleAtFixedRate(command: Runnable, initialDelay: Long, period: Long, unit: TimeUnit): ScheduledFuture[_] =
     throw new UnsupportedOperationException
 
-  override def scheduleWithFixedDelay(command: Runnable, initialDelay: Long, delay: Long, unit: TimeUnit) =
+  override def scheduleWithFixedDelay(command: Runnable, initialDelay: Long, delay: Long, unit: TimeUnit): ScheduledFuture[_] =
     throw new UnsupportedOperationException
 }
 
