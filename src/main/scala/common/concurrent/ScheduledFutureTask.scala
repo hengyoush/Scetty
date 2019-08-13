@@ -8,7 +8,7 @@ import common.concurrent.PromiseTask.toCallable
 import ScheduledFutureTask._
 
 final class ScheduledFutureTask[V](e: AbstractScheduledEventExecutor, c: Callable[V], n: Long, p: Long)
-  extends PromiseTask[V](e, c) with ScheduledFuture[V] {
+  extends PromiseTask[V](e, c) with ScheduledFuture[V] with Ordering[ScheduledFutureTask[_]] {
   private val id = nextTaskId.getAndIncrement
   private var deadlineNanos: Long = n
   private val periodNanos: Long = p
@@ -29,12 +29,33 @@ final class ScheduledFutureTask[V](e: AbstractScheduledEventExecutor, c: Callabl
     else 1
   }
 
-  override def run(): Unit = ???
+  override def compare(x: ScheduledFutureTask[_], y: ScheduledFutureTask[_]): Int = x compareTo y
+
+  override def run(): Unit = {
+    if (periodNanos == 0) {
+      super.run()
+    } else {
+      // run之后重新塞回去，首先要确保自己没有被取消（继承了Promise）
+      if (!isCancelled) {
+        c.call()
+        if (!e.isShutdown) {
+          if (periodNanos > 0)
+            deadlineNanos += periodNanos
+          else
+            deadlineNanos = nanoTime - periodNanos
+          e.schedule0(task = this)
+        }
+      }
+    }
+  }
 }
 
 object ScheduledFutureTask {
   private val nextTaskId = new AtomicLong
   private val START_TIME = System.nanoTime
+
+  def apply[V](e: AbstractScheduledEventExecutor, c: Callable[V], n: Long, p: Long): ScheduledFutureTask[V] =
+    new ScheduledFutureTask(e, c, n, p)
 
   private[concurrent] def nanoTime = System.nanoTime - START_TIME
 
